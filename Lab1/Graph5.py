@@ -12,9 +12,11 @@ z = np.arange(0, 8, 0.01)
 
 plt.xlabel(r'$x$')
 plt.ylabel(r'$f(x)$')
-plt.title(r'$Approximation$')
+plt.title(r'Approximation')
 
-plt.plot(z, np.poly1d(c)(z))
-plt.plot(z, np.poly1d(a)(z))
+plt.plot(z, np.poly1d(c)(z), label = r'f_1(x) = deg1(x)')
+plt.plot(z, np.poly1d(a)(z), label = r'f_2(x) = deg4(x)')
+plt.legend()
 plt.grid()
+
 plt.show()
