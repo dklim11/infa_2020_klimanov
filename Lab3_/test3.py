@@ -1,4 +1,4 @@
-import pygame
+﻿import pygame
 from pygame.draw import *
 import numpy as np
 
@@ -24,7 +24,7 @@ def Bird(x, y, k):
 	ellipse(screen, (255, 255, 255), [x + 26 * k, y + 50 * k, 40 * k, 50 * k])
 	ellipse(screen, (255, 255, 255), [x + 70 * k, y + 75 * k, 70 * k, 15 * k])
 	ellipse(screen, (255, 255, 255), [x + 35 * k, y + 90 * k, 65 * k, 15 * k])
-
+	
 	#tail
 	polygon(screen, (255, 255, 255), [[x, y + 40 * k], [x - 40 * k, y + 30 * k], [x - 30 * k, y], [x + 10 * k, y + 20 * k]], 0)	
 	
@@ -38,6 +38,26 @@ def Bird(x, y, k):
 	#clutches&
 	polygon(screen, (255, 232, 0), [[x + 135 * k, y + 78 * k], [x + 155 * k, y + 82 * k], [x + 140 * k, y + 85 * k], [x + 150 * k, y + 90 * k], [x + 135 * k, y + 92 * k], [x + 130 * k, y + 100 * k], [x + 130 * k, y + 86 * k]])
 	polygon(screen, (255, 232, 0), [[x + 100 * k, y + 95 * k], [x + 120 * k, y + 99 * k], [x + 105 * k, y + 102 * k], [x + 115 * k, y + 107 * k], [x + 100 * k, y + 109 * k], [x + 95 * k, y + 117 * k], [x + 95 * k, y + 99 * k]])
+
+def BirdReversed(x, y, k):
+    ellipse(screen, (255, 255, 255), [x, y, 130 * k, 70 * k])
+    ellipse(screen, (255, 255, 255), [x - 55 * k, y + 10 * k, 80 * k, 30 * k])
+    ellipse(screen, (255, 255, 255), [x - 85 * k, y - 5 * k, 50 * k, 30 * k])
+    ellipse(screen, (0, 0, 0), [x - 72 * k, y, 8 * k, 8 * k])
+    ellipse(screen, (255, 255, 255), [x + 30 * k, y + 40 * k, 80 * k, 50 * k])
+    ellipse(screen, (255, 255, 255), [x + 60 * k, y + 50 * k, 40 * k, 50 * k])
+    ellipse(screen, (255, 255, 255), [x - 10 * k, y + 75 * k, 70 * k, 15 * k])
+    ellipse(screen, (255, 255, 255), [x + 25 * k, y + 90 * k, 65 * k, 15 * k])
+
+    polygon(screen, (255, 255, 255), [[x + 120 * k, y + 40 * k], [x + 170 * k, y + 30 * k], [x + 160 * k, y], [x + 120 * k, y + 20 * k]], 0)
+
+    polygon(screen, (255, 255, 255), [[x + 95*k, y + 11*k], [x + 115 * k, y - 19*k], [x + 175 * k, y - 34 * k], [x + 185 * k, y - 49 * k], [x + 100 * k, y - 54 * k], [x + 45*k, y - 49 * k], [x + 42 * k, y + k]], 0)
+    polygon(screen, (255, 255, 255), [[x + 100*k, y + 70*k], [x + 105*k, y - 29*k], [x + 165*k, y - 44*k], [x + 175*k, y - 59 * k], [x + 90*k, y - 64*k], [x + 35*k, y - 59 * k], [x + 40*k, y + 5*k]], 0)
+
+    polygon(screen, (255, 232, 0), [[x - 85*k, y + 5*k], [x - 112 * k, y + 5*k], [x - 104 * k, y + 12*k], [x - 85 * k, y + 12*k]], 0)
+
+    polygon(screen, (255, 232, 0), [[x - 5*k, y + 78*k], [x - 25*k, y + 82*k], [x - 10*k, y + 85*k], [x - 20*k, y + 90*k], [x - 5*k, y + 92*k], [x, y + 100*k], [x, y + 86*k]])
+    polygon(screen, (255, 232, 0), [[x + 30*k, y + 93*k], [x + 10*k, y + 97*k], [x + 25*k, y + 100*k], [x + 15*k, y + 105*k], [x + 30*k, y + 107*k], [x + 35*k, y + 115*k], [x + 35*k, y + 101*k]])
 
 def font():
 	"""фон, как на исходной картинке - набор разноцветных прямоугольников"""
@@ -79,16 +99,20 @@ fish(450, 600, 1)
 fish(50, 550, 1)
 Bird(200, 450, 1/4)
 Bird(350, 500, 3/4)
-Bird(570, 420, 1/5)
+BirdReversed(570, 420, 1/4)
+
 
 #drawing seagulls
 albatross1(60, 100, 0.5)
 albatross1(80, 150, 1)
 albatross1(500, 200, 0.7)
+albatross1(180, 300, 0.3)
 albatross2(300, 200, 1)
 albatross2(60, 50, 0.5)
+albatross2(150, 320, 0.3)
 albatross3(400, 50, 1)
 albatross3(200, 100, 0.5)
+albatross3(190, 335, 0.4)
 
 pygame.display.update()
 
