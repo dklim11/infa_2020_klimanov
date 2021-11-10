@@ -169,7 +169,7 @@ class Target:
         self.x = rnd.randint(450, 780)
         self.y = rnd.randint(100, 500)
         self.vx = rnd.randint(5, 10)
-        self.vy = rnd.randint(5,10)
+        self.vy = rnd.randint(2,5)
         self.r = rnd.randint(2, 50)
         color = self.color = RED
 
@@ -190,7 +190,7 @@ class Target:
 
         if self.vx != 0:
             pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.r)
-            self.vy -= gravitation
+            #self.vy -= gravitation
 
         if self.x <= 100 + self.r:
             self.x = 100 + self.r
