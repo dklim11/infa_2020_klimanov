@@ -154,10 +154,13 @@ class Gun:
 
 class Target:
     def __init__(self):
+        self.screen = screen
         self.points = 0
         self.live = 1
         self.x = 500
         self.y = 400
+        self.vx = 20
+        self.vy = 20
         self.r = 35
         self.color = GREY
 
@@ -165,6 +168,8 @@ class Target:
         """ Инициализация новой цели. """
         self.x = rnd.randint(450, 780)
         self.y = rnd.randint(100, 500)
+        self.vx = rnd.randint(5, 10)
+        self.vy = rnd.randint(5,10)
         self.r = rnd.randint(2, 50)
         color = self.color = RED
 
@@ -187,30 +192,18 @@ class Target:
             pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.r)
             self.vy -= gravitation
 
-        if self.x <= self.r:
-            self.x = self.r
-            self.vx = -self.vx * 0.6
-            self.vy *= 0.6
-            if abs(self.vx) <= 0.1:
-                self.vx = 0
-                self.vy = 0
-                self.live = False
+        if self.x <= 100 + self.r:
+            self.x = 100 + self.r
+            self.vx = -self.vx
         if self.x >= 800 - self.r:
             self.x = 800 - self.r
-            self.vy *= 0.6
-            self.vx = -self.vx * 0.6
-            if abs(self.vx) <= 0.01:
-                self.vx = 0
-                self.vy = 0
-                self.live = False
+            self.vx = -self.vx
         if self.y >= 550 - self.r:
-            self.vy = -0.6 * self.vy
-            self.vx *= 0.6
+            self.vy = -self.vy
             self.y = 550 - self.r
-            if abs(self.vy) <= 10:
-                self.vy = 0
-                self.vx = 0
-                self.live = False
+        if self.y <= self.r:
+            self.vy = -self.vy
+            self.y = self.r
 
     def draw(self):
         pygame.draw.circle(screen, RED, (self.x, self.y), self.r, self.r)
@@ -236,6 +229,7 @@ while not finished:
     for i in range(2):
         targets[i].T_move()
         targets[i].draw()
+
     for b in balls:
         if b.live:
             b.draw()
