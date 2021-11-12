@@ -28,6 +28,11 @@ class ball():
         Args:
         x - начальное положение мяча по горизонтали
         y - начальное положение мяча по вертикали
+
+        Balls can be fast: they have a type equal to 2, 
+        or they can be slow: in this case they have a type
+        equal to 1, but also slow balls correspond to a bigger
+        amount of points for hitting the target
         """
         self.screen = screen
         self.x = x
@@ -35,8 +40,15 @@ class ball():
         self.r = 10
         self.vx = 0
         self.vy = 0
-        self.color = choice(GAME_COLORS)
         self.live = True
+
+        chance = rnd.random()
+        if (chance < 0.6):
+            self.color = BLACK
+            self.type = 1
+        else:
+            self.color = choice(GAME_COLORS)
+            self.type = 2
 
     def move(self):
         """Переместить мяч по прошествии единицы времени.
@@ -55,25 +67,43 @@ class ball():
 
         if self.x <= self.r:
             self.x = self.r
-            self.vx = -self.vx * 0.6
-            self.vy *= 0.6
+
+            if self.type == 2:
+                self.vx = -self.vx * 0.6
+                self.vy *= 0.6
+            else:
+                self.vx *= -0.2
+                self.vy *= 0.2
+
             if abs(self.vx) <= 0.1:
                 self.vx = 0
                 self.vy = 0
                 self.live = False
         if self.x >= 800 - self.r:
             self.x = 800 - self.r
-            self.vy *= 0.6
-            self.vx = -self.vx * 0.6
+
+            if self.type == 2:
+                self.vx = -self.vx * 0.6
+                self.vy *= 0.6
+            else:
+                self.vx *= -0.2
+                self.vy *= 0.2
+            
             if abs(self.vx) <= 0.01:
                 self.vx = 0
                 self.vy = 0
                 self.live = False
         if self.y >= 550 - self.r:
-            self.vy = -0.6 * self.vy
-            self.vx *= 0.6
             self.y = 550 - self.r
-            if abs(self.vy) <= 10:
+
+            if self.type == 2:
+                self.vy = -self.vy * 0.6
+                self.vx *= 0.6
+            else:
+                self.vy *= -0.2
+                self.vx *= 0.2
+
+            if abs(self.vy) <= 5:
                 self.vy = 0
                 self.vx = 0
                 self.live = False
@@ -163,11 +193,14 @@ class Target:
         self.vx = rnd.randint(5, 10)
         self.vy = rnd.randint(2,5)
         self.r = rnd.randint(2, 50)
-        color = self.color = RED
+        self.color = RED
 
-    def hit(self, Score):
+    def hit(self, Score, ball_type):
         """Попадание шарика в цель."""
-        Score += 1
+        if ball_type == 2:
+            Score += 1
+        else:
+            Score += 10
         
         return Score
 
@@ -241,7 +274,7 @@ while not finished:
             b.move()
             for i in range(2):
                 if b.hittest(targets[i]) and targets[i].live:
-                    Score = targets[i].hit(Score)
+                    Score = targets[i].hit(Score, b.type)
                     targets[i] = Target()
         else:
             b.destroy()
