@@ -117,7 +117,6 @@ class Gun:
         Начальные значения компонент скорости мяча vx и vy зависят от положения мыши.
         """
         global balls, bullet
-        bullet += 1
         new_ball = ball(self.screen)
         new_ball.r += 5
         self.an = math.atan2((event.pos[1]-new_ball.y), (event.pos[0]-new_ball.x))
@@ -154,18 +153,10 @@ class Gun:
 
 class Target:
     def __init__(self):
+        """ Инициализация новой цели. """
         self.screen = screen
         self.points = 0
         self.live = 1
-        self.x = 500
-        self.y = 400
-        self.vx = 20
-        self.vy = 20
-        self.r = 35
-        self.color = GREY
-
-    def new_target(self):
-        """ Инициализация новой цели. """
         self.x = rnd.randint(450, 780)
         self.y = rnd.randint(100, 500)
         self.vx = rnd.randint(5, 10)
@@ -208,10 +199,8 @@ class Target:
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-bullet = 0
 balls = []
 targets = [0] * 2
-
 
 clock = pygame.time.Clock()
 gun = Gun(screen)
@@ -250,7 +239,7 @@ while not finished:
             for i in range(2):
                 if b.hittest(targets[i]) and targets[i].live:
                     targets[i].hit()
-                    targets[i].new_target()
+                    targets[i] = Target()
         else:
             b.destroy()
     gun.power_up()
