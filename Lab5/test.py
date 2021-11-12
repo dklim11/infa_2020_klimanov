@@ -18,6 +18,7 @@ WHITE = 0xFFFFFF
 GREY = 0x7D7D7D
 GAME_COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
+Score = 0
 WIDTH = 800
 HEIGHT = 600
 
@@ -164,9 +165,11 @@ class Target:
         self.r = rnd.randint(2, 50)
         color = self.color = RED
 
-    def hit(self, points=1):
+    def hit(self, Score):
         """Попадание шарика в цель."""
-        self.points += points
+        Score += 1
+        
+        return Score
 
     def T_move(self):
         """Переместить мяч по прошествии единицы времени.
@@ -238,10 +241,11 @@ while not finished:
             b.move()
             for i in range(2):
                 if b.hittest(targets[i]) and targets[i].live:
-                    targets[i].hit()
+                    Score = targets[i].hit(Score)
                     targets[i] = Target()
         else:
             b.destroy()
     gun.power_up()
 
+print("Your amount of points: ", Score)
 pygame.quit()
