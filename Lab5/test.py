@@ -188,9 +188,7 @@ class Target:
         self.x += self.vx
         self.y -= self.vy
 
-        if self.vx != 0:
-            pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.r)
-            #self.vy -= gravitation
+        pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.r)
 
         if self.x <= 100 + self.r:
             self.x = 100 + self.r
