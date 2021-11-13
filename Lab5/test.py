@@ -34,6 +34,7 @@ class ball():
         equal to 1, but also slow balls correspond to a bigger
         amount of points for hitting the target
         """
+        
         self.screen = screen
         self.x = x
         self.y = y
@@ -151,7 +152,8 @@ class Gun:
         Происходит при отпускании кнопки мыши.
         Начальные значения компонент скорости мяча vx и vy зависят от положения мыши.
         """
-        global balls, bullet
+        global balls, bullets
+        bullets += 1
         new_ball = ball(self.screen)
         new_ball.r += 5
         self.an = math.atan2((event.pos[1]-new_ball.y), (event.pos[0]-new_ball.x))
@@ -206,7 +208,7 @@ class Target:
         self.r = rnd.randint(2, 50)
 
         chance = rnd.random()
-        if chance > 0.4:
+        if chance > 0.5:
             self.color = RED
             self.type = 1
         else:
@@ -239,26 +241,46 @@ class Target:
 
         pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.r)
 
-        if self.x <= 100 + self.r:
-            self.x = 100 + self.r
-            self.vx = -self.vx
-        if self.x >= 800 - self.r:
-            self.x = 800 - self.r
-            self.vx = -self.vx
-        if self.y >= 550 - self.r:
-            self.vy = -self.vy
-            self.y = 550 - self.r
-        if self.y <= self.r:
-            self.vy = -self.vy
-            self.y = self.r
+        if self.type == 1:
+            if self.x <= 100 + self.r:
+                self.x = 100 + self.r
+                self.vx = -self.vx
+            if self.x >= 800 - self.r:
+                self.x = 800 - self.r
+                self.vx = -self.vx
+            if self.y >= 550 - self.r:
+                self.vy = -self.vy
+                self.y = 550 - self.r
+            if self.y <= self.r:
+                self.vy = -self.vy
+                self.y = self.r
+        else:
+            velocity = (self.vx**2 + self.vy**2)**(0.5)
+            if self.x <= 100 + self.r:
+                self.x = 100 + self.r
+                self.vx = velocity*rnd.random()
+                self.vy = (self.vy/abs(self.vy))*((velocity**2 - self.vx**2)**(0.5))
+            if self.x >= 800 - self.r:
+                self.x = 800 - self.r
+                self.vx = -velocity*rnd.random()
+                self.vy = (self.vy/abs(self.vy))*((velocity**2 - self.vx**2)**(0.5))
+            if self.y >= 550 - self.r:
+                self.y = 550 - self.r
+                self.vy = velocity*rnd.random()
+                self.vx = (self.vy/abs(self.vy))*((velocity**2 - self.vx**2)**(0.5))
+            if self.y <= self.r:
+                self.y = self.r
+                self.vy = -velocity*rnd.random()
+                self.vx = (self.vy/abs(self.vy))*((velocity**2 - self.vx**2)**(0.5))
 
     def draw(self):
-        pygame.draw.circle(screen, RED, (self.x, self.y), self.r, self.r)
+        pygame.draw.circle(screen, self.color, (self.x, self.y), self.r, self.r)
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 balls = []
 targets = [0] * 2
+bullets = 0
 
 clock = pygame.time.Clock()
 gun = Gun(screen)
@@ -302,5 +324,8 @@ while not finished:
             b.destroy()
     gun.power_up()
 
-print("Your amount of points: ", Score)
+if bullets > 0:
+    print("Your efficiency: ", round(Score/bullets, 1))
+else:
+    print("You have not even tried!")
 pygame.quit()
