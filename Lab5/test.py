@@ -72,7 +72,7 @@ class ball():
                 self.vx = -self.vx * 0.6
                 self.vy *= 0.6
             else:
-                self.vx *= -0.2
+                self.vx = -0.2*self.vx
                 self.vy *= 0.2
 
             if abs(self.vx) <= 0.1:
@@ -86,10 +86,10 @@ class ball():
                 self.vx = -self.vx * 0.6
                 self.vy *= 0.6
             else:
-                self.vx *= -0.2
+                self.vx = -0.2*self.vx
                 self.vy *= 0.2
             
-            if abs(self.vx) <= 0.01:
+            if abs(self.vx) <= 0.1:
                 self.vx = 0
                 self.vy = 0
                 self.live = False
@@ -100,10 +100,14 @@ class ball():
                 self.vy = -self.vy * 0.6
                 self.vx *= 0.6
             else:
-                self.vy *= -0.2
+                self.vy = -0.2*self.vy
                 self.vx *= 0.2
 
-            if abs(self.vy) <= 5:
+            if abs(self.vy) <= 4 and self.type == 2:
+                self.vy = 0
+                self.vx = 0
+                self.live = False
+            elif abs(self.vy) <= 0.5:
                 self.vy = 0
                 self.vx = 0
                 self.live = False
@@ -184,23 +188,41 @@ class Gun:
 
 class Target:
     def __init__(self):
-        """ Инициализация новой цели. """
+        """ Инициализация новой цели. 
+        Target can have type 1 and 2. Type 1 relates to a 
+        simple targets, that have a predictory pattern of moving.
+        Type 2 relates to complicated targets, which have a random
+        collision with the walls.
+        
+        Type 1 --> 1 point
+        Type 2 --> 5 points
+        """
         self.screen = screen
-        self.points = 0
         self.live = 1
         self.x = rnd.randint(450, 780)
         self.y = rnd.randint(100, 500)
         self.vx = rnd.randint(5, 10)
         self.vy = rnd.randint(2,5)
         self.r = rnd.randint(2, 50)
-        self.color = RED
 
-    def hit(self, Score, ball_type):
-        """Попадание шарика в цель."""
-        if ball_type == 2:
-            Score += 1
+        chance = rnd.random()
+        if chance > 0.4:
+            self.color = RED
+            self.type = 1
         else:
+            self.color = GREEN
+            self.type = 2
+
+    def hit(self, Score, ball_type, target_type):
+        """Попадание шарика в цель."""
+        if ball_type == 2 and target_type == 1:
+            Score += 1
+        elif ball_type == 2 and target_type == 2:
+            Score += 5
+        elif ball_type == 1 and target_type == 1:
             Score += 10
+        else:
+            Score += 50
         
         return Score
 
@@ -274,7 +296,7 @@ while not finished:
             b.move()
             for i in range(2):
                 if b.hittest(targets[i]) and targets[i].live:
-                    Score = targets[i].hit(Score, b.type)
+                    Score = targets[i].hit(Score, b.type, targets[i].type)
                     targets[i] = Target()
         else:
             b.destroy()
