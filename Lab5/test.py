@@ -146,7 +146,7 @@ class Gun:
         self.x = 20
         self.bond_left = 20
         self.bond_right = 300
-        self.velocity = 5
+        self.velocity = 2
 
     def fire2_start(self, event):
         self.f2_on = 1
@@ -261,8 +261,8 @@ class Target:
         pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.r)
 
         if self.type == 1:
-            if self.x <= 100 + self.r:
-                self.x = 100 + self.r
+            if self.x <= self.r:
+                self.x = self.r
                 self.vx = -self.vx
             if self.x >= 800 - self.r:
                 self.x = 800 - self.r
@@ -275,8 +275,8 @@ class Target:
                 self.y = self.r
         else:
             velocity = (self.vx**2 + self.vy**2)**(0.5)
-            if self.x <= 100 + self.r:
-                self.x = 100 + self.r
+            if self.x <= self.r:
+                self.x = self.r
                 self.vx = velocity*rnd.random()
                 self.vy = (self.vy/abs(self.vy))*((velocity**2 - self.vx**2)**(0.5))
             if self.x >= 800 - self.r:
