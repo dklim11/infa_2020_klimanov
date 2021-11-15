@@ -143,6 +143,10 @@ class Gun:
         self.f2_on = 0
         self.an = 1
         self.color = GREY
+        self.x = 20
+        self.bond_left = 20
+        self.bond_right = 300
+        self.velocity = 5
 
     def fire2_start(self, event):
         self.f2_on = 1
@@ -156,6 +160,7 @@ class Gun:
         bullets += 1
         new_ball = ball(self.screen)
         new_ball.r += 5
+        new_ball.x = self.x
         self.an = math.atan2((event.pos[1]-new_ball.y), (event.pos[0]-new_ball.x))
         new_ball.vx = self.f2_power * math.cos(self.an)
         new_ball.vy = - self.f2_power * math.sin(self.an)
@@ -166,18 +171,32 @@ class Gun:
     def targetting(self, event):
         """Прицеливание. Зависит от положения мыши."""
         if event:
-            if event.pos[0] == 20:
+            if event.pos[0] == self.x:
                 self.an = 90
             else:
-                self.an = math.atan((event.pos[1]-450) / (event.pos[0]-20))
+                self.an = math.atan2((event.pos[1]-450), (event.pos[0] - self.x))
         if self.f2_on:
             self.color = RED
         else:
             self.color = GREY
 
+    def G_move(self):
+        """
+        Gun circulates between two positions with 
+        constant velocity.
+        """
+        self.x += self.velocity
+        if self.x >= self.bond_right:
+            self.velocity = -self.velocity
+            self.x = self.bond_right
+        if self.x <= self.bond_left:
+            self.velocity = -self.velocity
+            self.x = self.bond_left
+
     def draw(self):
-        pygame.draw.polygon(screen, self.color, [[20, 450], 
-        [20 + np.cos(self.an)*self.f2_power, 450 + np.sin(self.an)*self.f2_power], [20, 460]])
+        pygame.draw.circle(screen, self.color, (self.x, 455), 10, 10)
+        pygame.draw.polygon(screen, self.color, [[self.x, 450], 
+        [self.x + np.cos(self.an)*self.f2_power, 450 + np.sin(self.an)*self.f2_power], [self.x, 460]])
         pass
 
     def power_up(self):
@@ -292,6 +311,7 @@ for i in range(2):
 while not finished:
     screen.fill(WHITE)
     gun.draw()
+    gun.G_move()
 
     for i in range(2):
         targets[i].T_move()
